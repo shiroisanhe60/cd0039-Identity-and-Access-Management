@@ -57,7 +57,7 @@ def post_drink(*args, **kwargs)
 @requires_auth('patch:drinks')
 def patch_drinks(payload, id):
     drink = Drink.query.get(id)
-    if drink is None:
+    if drink is not found:
        abort(404) 
     try:
         drink.row = row
