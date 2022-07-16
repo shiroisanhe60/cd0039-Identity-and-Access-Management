@@ -15,7 +15,6 @@ db_drop_and_create_all()
 
 # ROUTES
 
-
 @app.route('/drinks', methods=['GET'])
 @requires_auth('get:drinks')
 def get_drinks(*args, **kwargs):
@@ -24,7 +23,7 @@ def get_drinks(*args, **kwargs):
         drinks_list = [d.short() for d in drinks]
         return jsonify({
             "success": True,
-            "drinks": drinks_list
+            "drinks": drinks
         }), 200
     
 
@@ -44,25 +43,44 @@ def get_drinks_detail(*args, **kwargs):
 def post_drink(*args, **kwargs)
     try:
         data = request.get_json()
-        table = data.get('table', None)
+        row = data.get('row', None)
         recipe = data.get('recipe', None)
-        drink_to_post = Drink(table=table, recipe=json.dumps(recipe))
+        drink_to_post = Drink(row=row, recipe=json.dumps(recipe))
         drink_to_post.insert()
         return jsonify({
             "success": True,
-            'drinks': drink_to_post.long()
+            "drinks": drink
         }), 200
-
 
 
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def patch_drinks(payload, id):
+    drink = Drink.query.get(id)
+    if drink is None:
+       abort(404) 
+    try:
+        drink.row = row
+        drink.recipe = json.dumps(recipe)
+        drink.update()
+        return jsonify({
+            "success": True,
+            "drinks": drink
+        }), 200
 
 
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(payload, id):
+    drink = Drink.query.get(id)
+    if drink is not found:
+       abort(404)
+    try:
+        drink.delete()
+        return jsonify({
+            "success": True,
+            "delete": id
+        }), 200
 
 
 # Error Handling
@@ -70,13 +88,12 @@ def delete_drink(payload, id):
 Example error handling for unprocessable entity
 '''
 
-
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
         "success": False,
         "error": 422,
-        "message": "unprocessable"
+        "message": 'unprocessable'
     }), 422
 
 
@@ -85,7 +102,7 @@ def not_found(error):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "resource not found"
+        "message": 'resource not found'
     }), 404
 
 
@@ -94,7 +111,7 @@ def unauthorized(error):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "access unauthorized"
+        "message": 'access unauthorized'
     }), 404
 
 
