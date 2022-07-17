@@ -25,6 +25,10 @@ def get_drinks(*args, **kwargs):
             "success": True,
             "drinks": drinks
         }), 200
+    except Exception:
+        print(Exception)
+    def printError(e):
+        print e
     
 
 @app.route('/drinks-detail', methods=['GET'])
@@ -36,6 +40,10 @@ def get_drinks_detail(*args, **kwargs):
             "success": True,
             "drinks": drinks
         }), 200
+    except Exception:
+        print(Exception)
+        abort(500)
+    
     
     
 @app.route('/drinks', methods=['POST'])
@@ -51,6 +59,9 @@ def post_drink(*args, **kwargs)
             "success": True,
             "drinks": drink
         }), 200
+    except Exception:
+        print(Exception)
+    abort(422)
 
 
 @app.route('/drinks/<int:id>', methods=['PATCH'])
@@ -67,7 +78,10 @@ def patch_drinks(payload, id):
             "success": True,
             "drinks": drink
         }), 200
-
+    except Exception:
+        print(Exception)
+        abort(422)
+    
 
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
@@ -81,6 +95,10 @@ def delete_drink(payload, id):
             "success": True,
             "delete": id
         }), 200
+    except Exception:
+        print(Exception)
+    def printError(e):
+        print e
 
 
 # Error Handling
