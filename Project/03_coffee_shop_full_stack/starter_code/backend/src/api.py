@@ -27,8 +27,7 @@ def get_drinks(*args, **kwargs):
         }), 200
     except Exception:
         print(Exception)
-    def printError(e):
-        print e
+        abort(500)
     
 
 @app.route('/drinks-detail', methods=['GET'])
@@ -61,15 +60,21 @@ def post_drink(*args, **kwargs)
         }), 200
     except Exception:
         print(Exception)
-    abort(422)
+        abort(422)
 
 
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def patch_drinks(payload, id):
+    data = request.get_json()
     drink = Drink.query.get(id)
+    row = data.get('row', None)
+    recipe = data.get('recipe', None)
+    drink = Drink.query.filter_by(id=id).one_or_none()
     if drink is not found:
        abort(404) 
+    if row is not found:
+        abort(400)
     try:
         drink.row = row
         drink.recipe = json.dumps(recipe)
@@ -97,8 +102,8 @@ def delete_drink(payload, id):
         }), 200
     except Exception:
         print(Exception)
-    def printError(e):
-        print e
+        abort(500)
+    
 
 
 # Error Handling
