@@ -47,7 +47,7 @@ def get_drinks_detail(*args, **kwargs):
     
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
-def post_drink(*args, **kwargs)
+def post_drink(*args, **kwargs):
     try:
         data = request.get_json()
         row = data.get('row', None)
