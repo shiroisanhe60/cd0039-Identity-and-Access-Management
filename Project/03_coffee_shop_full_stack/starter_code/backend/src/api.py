@@ -2,6 +2,10 @@ import os
 from flask import Flask, request, jsonify, abort
 from sqlalchemy import exc
 import json
+import os
+from flask import Flask, request, jsonify, abort
+from sqlalchemy import exc
+import json
 from flask_cors import CORS
 
 from .database.models import db_drop_and_create_all, setup_db, Drink
@@ -28,7 +32,8 @@ def get_drinks(*args, **kwargs):
     except Exception:
         print(Exception)
         abort(500)
-    
+
+
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_detail(*args, **kwargs):
@@ -40,8 +45,9 @@ def get_drinks_detail(*args, **kwargs):
         }), 200
     except Exception:
         print(Exception)
-        abort(500) 
-    
+        abort(500)
+
+
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def post_drink(*args, **kwargs):
@@ -58,7 +64,8 @@ def post_drink(*args, **kwargs):
     except Exception:
         print(Exception)
         abort(422)
-        
+
+
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def patch_drinks(payload, id):
@@ -68,7 +75,7 @@ def patch_drinks(payload, id):
     recipe = data.get('recipe', None)
     drink = Drink.query.filter_by(id=id).one_or_none()
     if drink is not found:
-       abort(404) 
+        abort(404)
     if row is not found:
         abort(400)
     try:
@@ -82,13 +89,14 @@ def patch_drinks(payload, id):
     except Exception:
         print(Exception)
         abort(422)
-    
+
+
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(payload, id):
     drink = Drink.query.get(id)
     if drink is not found:
-       abort(404)
+        abort(404)
     try:
         drink.delete()
         return jsonify({
@@ -98,7 +106,7 @@ def delete_drink(payload, id):
     except Exception:
         print(Exception)
         abort(500)
-    
+
 # Error Handling
 '''
 Example error handling for unprocessable entity
@@ -113,6 +121,7 @@ def unprocessable(error):
         "message": 'unprocessable'
     }), 422
 
+
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
@@ -121,6 +130,7 @@ def not_found(error):
         "message": 'resource not found'
     }), 404
 
+
 @app.errorhandler(404)
 def unauthorized(error):
     return jsonify({
@@ -128,6 +138,7 @@ def unauthorized(error):
         "error": 404,
         "message": 'access unauthorized'
     }), 404
+
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
