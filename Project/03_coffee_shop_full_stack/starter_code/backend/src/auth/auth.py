@@ -74,18 +74,24 @@ def verify_decode_jwt(token):
             }
         if rsa_key:
             try:
-                payload = jwt.decode(token, rsa_key, algorithms=ALGORITHMS, audience=API_AUDIENCE, issuer='https://' + AUTH0_DOMAIN + '/')
-            return payload
-            except jwt.ExpiredSignatureError:
-                raise AuthError({
-                    'code': 'token_expired',
-                    'description': 'Token expired.'
+                payload = jwt.decode(
+                    token, rsa_key, algorithms=ALGORITHMS,
+                    audience=API_AUDIENCE,
+                    issuer='https://' + AUTH0_DOMAIN + '/'
+                )
+                return payload
+                except jwt.ExpiredSignatureError:
+                    raise AuthError({
+                        'code': 'token_expired',
+                        'description': 'Token expired.'
                     }, 401)
 
             except jwt.JWTClaimsError:
                 raise AuthError({
                     'code': 'invalid_claims',
-                    'description': 'Incorrect claims. Please, check the audience and issuer.'
+                    'description':
+                        'Incorrect claims. Please,
+                        check the audience and issuer.'
                     }, 401)
             except Exception:
                 raise AuthError({
