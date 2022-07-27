@@ -10,10 +10,10 @@ from .auth.auth import AuthError, requires_auth
 app = Flask(__name__)
 setup_db(app)
 CORS(app)
-    
 db_drop_and_create_all()
 
 # ROUTES
+
 
 @app.route('/drinks', methods=['GET'])
 @requires_auth('get:drinks')
@@ -29,7 +29,6 @@ def get_drinks(*args, **kwargs):
         print(Exception)
         abort(500)
     
-
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def get_drinks_detail(*args, **kwargs):
@@ -41,9 +40,7 @@ def get_drinks_detail(*args, **kwargs):
         }), 200
     except Exception:
         print(Exception)
-        abort(500)
-    
-    
+        abort(500) 
     
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
@@ -61,8 +58,7 @@ def post_drink(*args, **kwargs):
     except Exception:
         print(Exception)
         abort(422)
-
-
+        
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def patch_drinks(payload, id):
@@ -87,7 +83,6 @@ def patch_drinks(payload, id):
         print(Exception)
         abort(422)
     
-
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(payload, id):
@@ -104,12 +99,11 @@ def delete_drink(payload, id):
         print(Exception)
         abort(500)
     
-
-
 # Error Handling
 '''
 Example error handling for unprocessable entity
 '''
+
 
 @app.errorhandler(422)
 def unprocessable(error):
@@ -119,7 +113,6 @@ def unprocessable(error):
         "message": 'unprocessable'
     }), 422
 
-
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({
@@ -128,7 +121,6 @@ def not_found(error):
         "message": 'resource not found'
     }), 404
 
-
 @app.errorhandler(404)
 def unauthorized(error):
     return jsonify({
@@ -136,7 +128,6 @@ def unauthorized(error):
         "error": 404,
         "message": 'access unauthorized'
     }), 404
-
 
 @app.errorhandler(AuthError)
 def handle_auth_error(ex):
