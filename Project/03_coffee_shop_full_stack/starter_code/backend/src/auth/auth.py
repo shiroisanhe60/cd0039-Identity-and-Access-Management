@@ -104,10 +104,11 @@ def verify_decode_jwt(token):
                     issuer='https://' + AUTH0_DOMAIN + '/'
                 )
                 return payload
-                except jwt.ExpiredSignatureError:
-                    raise AuthError({
-                        'code': 'token_expired',
-                        'description': 'Token expired.'
+            
+            except jwt.ExpiredSignatureError:
+                raise AuthError({
+                    'code': 'token_expired',
+                    'description': 'Token expired.'
                     }, 401)
 
             except jwt.JWTClaimsError:
@@ -134,7 +135,15 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
+            
+            try:
+                payload = verify_decode_jwt(token)
+            except:
+                raise AuthError({
+                    'code': 'invalid token',
+                    'description': 'Invalid Token'
+                }, 401)
+                
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
         return wrapper
