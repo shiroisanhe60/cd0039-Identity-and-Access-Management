@@ -32,7 +32,31 @@ def get_token_auth_header():
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
         }, 401)
-        return token
+        
+    parts = auth.split()
+    
+    if parts[0].lower() != "bearer":
+        raise AuthError(
+            {
+                'code': 'invalid_header',
+                'description': 'Authorization Header Must Start With'
+                'Bearer'
+            }, 401)
+    elif len(parts) == 1:
+        raise AuthError(
+            {
+                'code': 'invalid_header',
+                'description': 'Token Not Found'
+            }, 401)
+    elif len(parts) > 2:
+        raise AuthError(
+            {
+                'code': 'invalid_header',
+                'description': 'Authorization Header Must Be'
+                'Bearer token'
+            }, 401)
+    token = parts[1]
+    return token
 
 
 def check_permissions(permission, payload):
