@@ -32,9 +32,9 @@ def get_token_auth_header():
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
         }, 401)
-        
+
     parts = auth.split()
-    
+
     if parts[0].lower() != "bearer":
         raise AuthError(
             {
@@ -104,7 +104,7 @@ def verify_decode_jwt(token):
                     issuer='https://' + AUTH0_DOMAIN + '/'
                 )
                 return payload
-            
+
             except jwt.ExpiredSignatureError:
                 raise AuthError({
                     'code': 'token_expired',
@@ -135,7 +135,7 @@ def requires_auth(permission=''):
         @wraps(f)
         def wrapper(*args, **kwargs):
             token = get_token_auth_header()
-            
+
             try:
                 payload = verify_decode_jwt(token)
             except:
@@ -143,7 +143,7 @@ def requires_auth(permission=''):
                     'code': 'invalid token',
                     'description': 'Invalid Token'
                 }, 401)
-                
+
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs)
         return wrapper
