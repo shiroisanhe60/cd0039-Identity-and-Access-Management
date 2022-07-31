@@ -46,7 +46,7 @@ def get_token_auth_header():
         raise AuthError(
             {
                 'code': 'invalid_header',
-                'description': 'Token Not Found'
+                'description': 'Token Not Found.'
             }, 401)
     elif len(parts) > 2:
         raise AuthError(
@@ -64,7 +64,7 @@ def check_permissions(permission, payload):
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
-            'description': 'Permissions are not found.'
+            'description': 'Permissions not found.'
         }, 400)
 
     if permission not in payload['permissions']:
@@ -141,7 +141,7 @@ def requires_auth(permission=''):
             except:
                 raise AuthError({
                     'code': 'invalid token',
-                    'description': 'Invalid Token'
+                    'description': 'Invalid Token.'
                 }, 401)
 
             check_permissions(permission, payload)
