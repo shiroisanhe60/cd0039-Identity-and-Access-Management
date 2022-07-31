@@ -14,6 +14,7 @@ from .auth.auth import AuthError, requires_auth
 app = Flask(__name__)
 setup_db(app)
 CORS(app)
+
 db_drop_and_create_all()
 
 # ROUTES
@@ -53,9 +54,9 @@ def get_drinks_detail(*args, **kwargs):
 def post_drink(*args, **kwargs):
     try:
         data = request.get_json()
-        row = data.get('row', None)
+        title = data.get('title', None)
         recipe = data.get('recipe', None)
-        drink_to_post = Drink(row=row, recipe=json.dumps(recipe))
+        drink_to_post = Drink(title=title, recipe=json.dumps(recipe))
         drink_to_post.insert()
         return jsonify({
             "success": True,
@@ -71,15 +72,15 @@ def post_drink(*args, **kwargs):
 def patch_drinks(payload, id):
     data = request.get_json()
     drink = Drink.query.get(id)
-    row = data.get('row', None)
+    title = data.get('title', None)
     recipe = data.get('recipe', None)
     drink = Drink.query.filter_by(id=id).one_or_none()
     if drink is not found:
         abort(404)
-    if row is not found:
+    if title is not found:
         abort(400)
     try:
-        drink.row = row
+        drink.title = title
         drink.recipe = json.dumps(recipe)
         drink.update()
         return jsonify({
