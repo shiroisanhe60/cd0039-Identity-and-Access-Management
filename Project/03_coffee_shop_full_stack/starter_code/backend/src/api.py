@@ -76,7 +76,7 @@ def patch_drinks(payload, id):
     drink = Drink.query.filter_by(id=id).one_or_none()
     if drink is not found:
         abort(404)
-    if title is not found:
+    if title is not None:
         abort(400)
     try:
         drink.title = title
