@@ -22,13 +22,12 @@ db_drop_and_create_all()
 
 @app.route('/drinks', methods=['GET'])
 @requires_auth('get:drinks')
-def get_drinks(*args, **kwargs):
+def get_drinks():
     try:
         drinks = Drink.query.all()
-        drinks_list = [d.short() for d in drinks]
         return jsonify({
             "success": True,
-            "drinks": drinks
+            "drinks": [d.short() for d in drinks]
         }), 200
     except Exception:
         print(Exception)
