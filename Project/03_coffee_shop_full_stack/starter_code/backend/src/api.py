@@ -41,7 +41,7 @@ def get_drinks_detail(*args, **kwargs):
         drinks = list(map(Drink.long, Drink.query.all()))
         return jsonify({
             "success": True,
-            "drinks": drinks
+            "drinks": [d.short() for d in drinks]
         }), 200
     except Exception:
         print(Exception)
@@ -59,7 +59,7 @@ def post_drink(*args, **kwargs):
         drink_to_post.insert()
         return jsonify({
             "success": True,
-            "drinks": drink
+            "drinks": [d.short() for d in drinks]
         }), 200
     except Exception:
         print(Exception)
@@ -84,7 +84,7 @@ def patch_drinks(payload, id):
         drink.update()
         return jsonify({
             "success": True,
-            "drinks": drink
+            "drinks": [d.short() for d in drinks]
         }), 200
     except Exception:
         print(Exception)
